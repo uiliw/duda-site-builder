@@ -9,9 +9,13 @@ Partner API + MCP da Duda (tema, coleções, header/footer globais, SEO/AEO e mo
 No Claude Code:
 
 ```
+/plugin marketplace add anthropics/claude-plugins-official
 /plugin marketplace add uiliw/duda-site-builder
 /plugin install duda-site-builder@ohmline
 ```
+
+O primeiro comando só é necessário se o marketplace oficial ainda não estiver adicionado (sem ele,
+`frontend-design` não instala e o plugin não carrega — de propósito).
 
 As skills **obrigatórias** vêm como dependências e são instaladas junto:
 
