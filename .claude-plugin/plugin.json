@@ -1,0 +1,14 @@
+{
+  "name": "duda-site-builder",
+  "version": "1.0.0",
+  "description": "Metodologia Ohmline para redesign de sites de clientes na Duda: protótipo Next.js aprovado e site Duda nativo via Partner API + MCP.",
+  "author": { "name": "Ohmline", "url": "https://www.ohmline.com.br/" },
+  "homepage": "https://github.com/uiliw/duda-site-builder",
+  "repository": "https://github.com/uiliw/duda-site-builder",
+  "keywords": ["duda", "redesign", "nextjs", "website-builder"],
+  "dependencies": [
+    { "name": "frontend-design", "marketplace": "claude-plugins-official" },
+    "ui-ux-pro-max",
+    "impeccable"
+  ]
+}

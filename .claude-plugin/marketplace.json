@@ -1,0 +1,24 @@
+{
+  "name": "ohmline",
+  "owner": { "name": "Ohmline", "url": "https://www.ohmline.com.br/" },
+  "metadata": { "description": "Skills da Ohmline para redesign de sites na Duda." },
+  "allowCrossMarketplaceDependenciesOn": ["claude-plugins-official"],
+  "plugins": [
+    {
+      "name": "duda-site-builder",
+      "source": "./",
+      "description": "Redesign de sites na Duda: protótipo Next.js + site nativo via Partner API e MCP.",
+      "category": "design"
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "source": { "source": "github", "repo": "nextlevelbuilder/ui-ux-pro-max-skill" },
+      "description": "Dependência: inteligência de UI/UX (nextlevelbuilder/ui-ux-pro-max-skill)."
+    },
+    {
+      "name": "impeccable",
+      "source": { "source": "git-subdir", "url": "https://github.com/pbakaus/impeccable.git", "path": "plugin" },
+      "description": "Dependência: design fluency e auditoria (pbakaus/impeccable)."
+    }
+  ]
+}

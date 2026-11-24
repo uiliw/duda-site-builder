@@ -1,0 +1,30 @@
+<script>
+  /*
+    Agência Exemplo Home v2: estilo e movimento desta página.
+    A Duda escapa os caracteres menor-que, maior-que e e-comercial no Head HTML, então o CSS e o JS
+    chegam em base64 e são injetados aqui. Fonte legível: duda/home-v2 (styles.css, motion.js) no repositório.
+  */
+  (function () {
+    function d(s) { return new TextDecoder().decode(Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); })); }
+    var root = document.documentElement;
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) root.classList.add("ov-anim");
+    // Segurança: se o GSAP não carregar, mostra a página sem animação.
+    setTimeout(function () { if (!window.__ovready) root.classList.remove("ov-anim"); }, 4000);
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = d("/*FONTS*/");
+    document.head.appendChild(link);
+    var style = document.createElement("style");
+    style.textContent = d("/*STYLES*/");
+    document.head.appendChild(style);
+    window.__ovmotion = d("/*MOTION*/");
+    document.addEventListener("DOMContentLoaded", function () {
+      var s = document.createElement("script");
+      s.textContent = window.__ovmotion;
+      document.head.appendChild(s);
+    });
+  })();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>

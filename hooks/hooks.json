@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/skills/duda-site-builder/scripts/check-setup.sh\" --hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,679 @@
+/*
+  Agência Exemplo Home v2 — só estrutura e movimento.
+  Cores, tamanhos, entrelinhas, fontes, espaçamentos, fundos, bordas e botões ficam nas
+  propriedades nativas dos widgets (editáveis no editor da Duda). Aqui entra apenas o que a
+  Duda não faz: arco do hero, manifesto sobreposto, pins, trilha horizontal, lista de segmentos,
+  camadas do amanhecer, header fixo e ocultar header/footer globais nesta página.
+  Evite !important em cor/tamanho/espaçamento: ele bloqueia o editor.
+*/
+:root {
+  --ov-noite: #16132c;
+  --ov-indigo: #312d60;
+  --ov-aurora: #fff2e9;
+  --ov-sol: #f56035;
+  --ov-ambar: #ffab66;
+  --ov-sun: linear-gradient(35deg, #f56035 20%, #ffab66 95%, #ffc18f 100%);
+  --ov-hdr: 76px;
+  --ov-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+  A Duda marca o body com container-type: inline-size (sem nenhuma regra @container usando).
+  Isso transforma o body em referência para position: fixed e quebra os pins e o header fixo.
+*/
+body.dmRoot { container-type: normal !important; }
+
+
+/* Fraunces com eixo SOFT no máximo: ecoa as serifas macias do logotipo (o editor não expõe eixos). */
+[class^="ov-"] [style*="Fraunces"], [class^="ov-"] .caption-title { font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144; }
+
+/* Ícone padrão dos botões da Duda (estrela) não faz parte do desenho. */
+[class*="ov-btn-"] a.dmButtonLink .iconBg { display: none !important; }
+[class*="ov-btn-"] a.dmButtonLink { transition: scale 0.5s var(--ov-ease), background-color 0.4s, color 0.4s, border-color 0.4s; }
+.ov-btn-sun a.dmButtonLink:hover, .ov-btn-indigo a.dmButtonLink:hover { scale: 1.04; }
+[class*="ov-btn-"] a.dmButtonLink:focus-visible { outline: 2px solid var(--ov-ambar); outline-offset: 4px; }
+
+/* ================= HERO ================= */
+/* Seções fixadas pelo GSAP: sem !important em position/tamanho, senão o pin (inline) perde. */
+.ov-hero {
+  position: relative;
+  overflow: hidden !important;
+  --arch: inset(21svh 7vw 0svh 57vw round 18vw 18vw 0vw 0vw);
+  --veil: 0;
+}
+/* A imagem se posiciona pela seção: os contêineres intermediários ficam estáticos. */
+.ov-hero > section, .ov-hero > section > .grid, .ov-hero > section > .grid > .group,
+.ov-hero .ov-hero-col { position: static !important; }
+/* Estrutura do hero (não editável): altura de tela e espaço para o header fixo. */
+.ov-hero .flex-element.group.ov-hero-col {
+  min-height: 100svh !important;
+  padding-top: calc(var(--ov-hdr) + 2.5rem) !important;
+  padding-bottom: 3.5rem !important;
+  justify-content: flex-start !important;
+}
+.ov-hero-media {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  clip-path: var(--arch);
+}
+.ov-hero-media .imageWidget, .ov-hero-media img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  object-fit: cover !important;
+  object-position: 62% 50% !important;
+}
+.ov-hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(22, 19, 44, 0.7), rgba(22, 19, 44, 0.55) 50%, rgba(22, 19, 44, 0.85));
+  opacity: var(--veil);
+}
+.ov-hero-title, .ov-hero-lead, .ov-hero-ctas { position: relative !important; z-index: 2; }
+/* Texto e botões descem para o rodapé do hero. */
+.ov-hero-lead { margin-top: auto !important; }
+.ov-anim .ov-hero-title, .ov-anim .ov-hero-lead, .ov-anim .ov-hero-ctas { visibility: hidden; }
+
+/* Manifesto: sobreposto quando há movimento; em fluxo normal com movimento reduzido. */
+.ov-manifesto { position: relative; z-index: 3; }
+.ov-anim .ov-manifesto {
+  position: absolute !important;
+  inset: 0 !important;
+  max-width: 1440px;
+  margin: 0 auto !important;
+  padding: 0 40px !important;
+  visibility: hidden;
+}
+
+/* ================= SERVIÇOS ================= */
+.ov-svc-grid > * { flex: 1 1 0 !important; min-width: 0; }
+.ov-svc-frame { position: relative; height: 76vh !important; overflow: hidden !important; }
+.ov-svc-img { position: absolute !important; inset: 0 !important; width: auto !important; height: auto !important; margin: 0 !important; }
+.ov-svc-img:nth-child(1) { z-index: 1; }
+.ov-svc-img:nth-child(2) { z-index: 2; }
+.ov-svc-img:nth-child(3) { z-index: 3; }
+.ov-svc-img:nth-child(4) { z-index: 4; }
+.ov-svc-img .imageWidget, .ov-svc-img img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover; }
+.ov-svc-mimg { display: none !important; }
+/* Marcador da lista: ponto com o gradiente do sol. */
+.ov-svc-items ul { list-style: none !important; padding: 0 !important; border-top: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-svc-items .dmNewParagraph ul li {
+  position: relative !important;
+  display: block !important;
+  padding: 0.9rem 0 0.9rem 1.5rem !important;
+  margin: 0 !important;
+  text-indent: 0 !important;
+  border-bottom: 1px solid rgba(255, 242, 233, 0.12);
+}
+.ov-svc-items .dmNewParagraph ul li::before {
+  content: "" !important;
+  font-size: 0 !important;
+  margin: 0 !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  translate: 0 -50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ov-sun);
+}
+
+/* ================= PROJETOS ================= */
+.ov-projects { overflow: hidden !important; }
+.ov-proj-track {
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6vw !important;
+  width: max-content !important;
+  max-width: none !important;
+  flex: none !important;
+  min-height: 100svh !important;
+  padding-right: 8vw !important;
+}
+.ov-proj-intro { width: 34vw !important; flex: none !important; }
+.ov-proj-end { width: 30vw !important; flex: none !important; }
+[class^="ov-"] .flex-element.widget-wrapper.ov-proj-gallery { width: auto !important; max-width: none !important; flex: none !important; }
+.ov-proj-gallery .dmPhotoGallery { overflow: visible !important; margin: 0 !important; width: auto !important; }
+.ov-proj-gallery .layout-container { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; height: auto !important; gap: clamp(1.5rem, 4vw, 4rem); width: max-content !important; }
+.ov-proj-gallery .photogallery-row { display: contents !important; }
+/* Cada projeto: imagem completa à esquerda, legenda ao lado (alinhada embaixo). */
+.ov-proj-gallery .photogallery-column { width: clamp(40rem, 64vw, 72rem) !important; max-width: none !important; flex: none !important; padding: 0 !important; }
+.ov-proj-gallery .photoGalleryThumbs { margin: 0 !important; padding: 0 !important; width: 100% !important; list-style: none; }
+.ov-proj-gallery .thumbnailInnerWrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  gap: 2.5rem !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+.ov-proj-gallery .image-container { flex: 0 0 62% !important; width: 62% !important; height: auto !important; overflow: hidden !important; }
+/* "Exibir imagem completa" com altura 0: a Duda usa a imagem como fundo e a caixa fica sem altura
+   fora da grade dela. Aqui o próprio img aparece na proporção natural, inteiro. */
+/* :not(#_a):not(#_b) só soma especificidade de id, para vencer a regra por widget da Duda. */
+#dm .ov-proj-gallery:not(#_a):not(#_b) .image-container { height: auto !important; padding: 0 !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .image-container a { padding: 0 !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-container,
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-title,
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-text,
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-text p { text-align: left !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-inner { display: block !important; text-align: left !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .caption-title { display: block !important; width: 100% !important; margin: 0 !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .image-container a { display: block !important; height: auto !important; background-image: none !important; }
+#dm .ov-proj-gallery:not(#_a):not(#_b) .image-container a img { display: block !important; width: 100% !important; height: auto !important; max-width: none !important; }
+.ov-proj-gallery .caption-container { flex: 1 1 auto !important; position: static !important; height: auto !important; background: none !important; padding: 0 0 1rem !important; text-align: left; }
+.ov-proj-gallery .caption-inner { padding: 0 !important; background: none !important; }
+/* A legenda da galeria não tem tamanho de fonte no editor. */
+.ov-proj-gallery .caption-title { font-size: clamp(2rem, 3vw, 3.25rem) !important; line-height: 1 !important; letter-spacing: -0.035em !important; text-align: left !important; margin: 0 !important; }
+.ov-proj-gallery .caption-text, .ov-proj-gallery .caption-text p { font-size: 1.05rem !important; line-height: 1.6 !important; margin: 0.75rem 0 0 !important; text-align: left !important; }
+.ov-proj-gallery .caption-button { display: none !important; }
+/* Moldura escura com brilho de sol atrás de cada projeto. */
+#dm .ov-proj-gallery:not(#_a):not(#_b) .image-container {
+  padding: 6% !important;
+  border-radius: 32px !important;
+  background: var(--ov-noite) radial-gradient(ellipse at 50% 85%, rgba(245, 96, 53, 0.28), transparent 60%) !important;
+}
+/* Entregas (lista no fim do Resumo) viram etiquetas. */
+.ov-proj-gallery .caption-text ul, .ov-portfolio-gallery .caption-text ul { list-style: none !important; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0 0 !important; padding: 0 !important; }
+.ov-proj-gallery .caption-text li, .ov-portfolio-gallery .caption-text li { margin: 0 !important; padding: 0.3rem 0.9rem !important; border: 1px solid rgba(255, 242, 233, 0.2); border-radius: 999px; font-size: 0.875rem !important; line-height: 1.5 !important; color: rgba(255, 242, 233, 0.85) !important; }
+.ov-proj-gallery .caption-text li::before, .ov-portfolio-gallery .caption-text li::before { content: none !important; }
+.ov-proj-gallery .caption-text li::marker, .ov-portfolio-gallery .caption-text li::marker { content: ""; }
+/* Texto ao lado da imagem entra quando o projeto chega na tela (classe posta pelo motion.js). */
+.ov-anim .ov-proj-gallery .caption-title, .ov-anim .ov-proj-gallery .caption-text > * { opacity: 0; translate: 0 40px; transition: opacity 0.9s, translate 1.2s var(--ov-ease); }
+.ov-anim .ov-proj-gallery .caption-text > :nth-child(2) { transition-delay: 0.1s; }
+.ov-anim .ov-proj-gallery .caption-text > :nth-child(3) { transition-delay: 0.2s; }
+.ov-anim .ov-proj-gallery .caption-text > :first-child { transition-delay: 0.08s; }
+.ov-anim .ov-proj-gallery .is-in .caption-title, .ov-anim .ov-proj-gallery .is-in .caption-text > * { opacity: 1; translate: 0 0; }
+
+/* ================= SEGMENTOS: galeria vira lista tipográfica ================= */
+.ov-seg-gallery { position: relative !important; margin-top: 5rem !important; }
+[class^="ov-"] .flex-element.widget-wrapper.ov-seg-gallery { width: 100% !important; max-width: none !important; }
+.ov-seg-gallery .dmPhotoGallery { margin: 0 !important; width: 100% !important; }
+.ov-seg-gallery .layout-container { display: block !important; border-top: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-seg-gallery .photogallery-row { display: block !important; margin: 0 !important; }
+.ov-seg-gallery .photogallery-column { width: 100% !important; max-width: none !important; padding: 0 !important; }
+.ov-seg-gallery .photoGalleryThumbs { margin: 0 !important; padding: 0 !important; list-style: none; border-bottom: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-seg-gallery .thumbnailInnerWrapper { position: relative; display: flex !important; align-items: center; gap: 1.25rem; padding: 1.5rem 0 !important; background: none !important; box-shadow: none !important; opacity: 1 !important; }
+/* Desktop: a imagem vira camada invisível sobre a linha (é ela que leva o link para o segmento). */
+.ov-seg-gallery .image-container { position: absolute !important; inset: 0 !important; z-index: 2; opacity: 0 !important; width: auto !important; height: auto !important; }
+.ov-seg-gallery .image-container a { display: block !important; width: 100% !important; height: 100% !important; }
+.ov-seg-gallery .caption-container { position: static !important; background: none !important; padding: 0 !important; text-align: left; height: auto !important; }
+.ov-seg-gallery .caption-inner { padding: 0 !important; background: none !important; }
+.ov-seg-gallery .caption-title { font-size: clamp(2rem, 6.4vw, 6.5rem) !important; line-height: 1 !important; letter-spacing: -0.035em !important; margin: 0 !important; text-align: left !important; transition: color 0.7s var(--ov-ease), translate 0.7s var(--ov-ease); }
+.ov-seg-gallery .photoGalleryThumbs:hover .caption-title { color: var(--ov-ambar) !important; translate: 1.5vw 0; }
+.ov-seg-gallery .caption-button { display: block !important; position: absolute !important; inset: 0 !important; opacity: 0 !important; margin: 0 !important; z-index: 2; }
+.ov-seg-cursor { pointer-events: none; position: absolute; left: 0; top: 0; z-index: 5; width: 17rem; height: 23rem; border-radius: 999px 999px 0 0; overflow: hidden; visibility: hidden; }
+.ov-seg-cursor img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ================= VALORES ================= */
+.ov-value { border-top: 1px solid rgba(255, 242, 233, 0.15); padding-top: 1.75rem; }
+.ov-value h3, .ov-value h4 { margin: 0 0 1rem !important; }
+/* Símbolo: recorte quadrado do logotipo (o círculo fica à esquerda do arquivo). */
+.ov-values-mark { flex: none !important; }
+.ov-values-mark img { object-fit: cover !important; object-position: left center !important; }
+
+/* ================= FAQ ================= */
+/* A coluna tem só a altura do conteúdo; o GSAP a fixa enquanto a lista passa. */
+.ov-faq [data-layout-grid] .flex-element.group.ov-faq-aside { align-self: flex-start !important; height: auto !important; min-height: 0 !important; }
+.ov-faq-acc [data-grab="accordion-item-container"] { border-bottom: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-faq-acc [data-grab="accordion-container"] { border-top: 1px solid rgba(255, 242, 233, 0.12); }
+/* Ícone: círculo com "+" que gira e ganha o sol quando aberto (o motion.js marca data-ov-open). */
+/* A seta fica invisível (não display:none) porque o motion.js lê a rotação dela para saber o estado. */
+.ov-faq-acc [data-grab="accordion-item-arrow"] { position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; overflow: hidden; pointer-events: none; }
+.ov-faq-acc [data-grab="accordion-item-arrow-wrapper"] {
+  position: relative; flex: none; display: grid !important; place-items: center; width: 2rem !important; height: 2rem !important;
+  border-radius: 50%; border: 1px solid rgba(255, 242, 233, 0.25); background: transparent !important;
+  transition: rotate 0.5s var(--ov-ease), background-color 0.5s, border-color 0.5s;
+}
+.ov-faq-acc [data-grab="accordion-item-arrow-wrapper"]::before {
+  content: ""; width: 14px; height: 14px;
+  background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  color: var(--ov-aurora);
+}
+.ov-faq-acc [data-ov-open="1"] [data-grab="accordion-item-arrow-wrapper"] { rotate: 45deg; background: var(--ov-sol) !important; border-color: transparent; }
+
+/* ================= AMANHECER ================= */
+.ov-sunrise {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden !important;
+  height: 100svh;
+  min-height: 640px;
+  /* Noite por trás do céu: o footer é creme e apareceria enquanto o céu ainda está escuro. */
+  background: var(--ov-noite);
+  --dawn: 1;
+  --sun: 1;
+  --glow: 1;
+  --ground: 1;
+  --line: 1;
+}
+/* Céu: gradiente da noite até o sol no horizonte (64%). */
+.ov-sunrise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to bottom, #16132c 0%, #312d60 30%, #6b4380 48%, #c9566a 58%, #f56035 64%);
+  opacity: var(--dawn);
+}
+.ov-sunrise > section { position: static !important; height: 100% !important; }
+/* Brilho difuso atrás do sol. */
+.ov-sunrise > section::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 36%;
+  width: 70vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 171, 102, 0.4);
+  filter: blur(120px);
+  opacity: var(--glow);
+  transform: translate(-50%, 50%) scale(calc(0.3 + 0.7 * var(--glow)));
+}
+/* Sol: nasce atrás do chão. */
+.ov-sunrise > section::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 36%;
+  width: clamp(14rem, 24vw, 30rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ov-sun);
+  transform: translate(-50%, calc(42% + (1 - var(--sun)) * 110%));
+}
+/* Chão: reflexo da aurora até o creme descer do horizonte. */
+.ov-sunrise::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 64%;
+  bottom: 0;
+  background:
+    linear-gradient(var(--ov-aurora), var(--ov-aurora)) top / 100% calc(var(--ground) * 100%) no-repeat,
+    linear-gradient(rgba(245, 96, 53, var(--dawn)), rgba(245, 96, 53, var(--dawn))),
+    var(--ov-noite);
+}
+/* A Duda pinta o fundo da seção no grid interno: aqui ele precisa ser transparente. */
+.ov-sunrise [data-layout-grid] { background: transparent !important; position: relative !important; z-index: 3 !important; height: 100% !important; }
+.ov-sunrise > section > .grid::before {
+  content: "";
+  position: absolute;
+  top: 64%;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 1px;
+  background: var(--ov-sol);
+  transform: scaleX(var(--line));
+}
+.ov-sunrise > section > .grid > .group { height: 100svh !important; min-height: 640px !important; }
+.ov-sunrise .flex-element.group.ov-sunrise-col { height: 100% !important; padding: 15svh 0 8svh !important; }
+.ov-sunrise-cta { margin-top: auto !important; }
+
+/* ================= HEADER GLOBAL ================= */
+/* Fixo e transparente sobre o topo; ganha fundo ao rolar (classe posta pelo motion.js). */
+#flex-header {
+  position: fixed !important;
+  inset: 0 0 auto 0 !important;
+  z-index: 50 !important;
+  background: transparent !important;
+  transition: background-color 0.5s, backdrop-filter 0.5s;
+}
+#flex-header.is-scrolled { background-color: rgba(22, 19, 44, 0.75) !important; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+#flex-header [data-layout-grid] { background: transparent !important; }
+#flex-header { padding: 0 !important; }
+.ov-header .flex-element.group .flex-element.group { padding-top: 0 !important; padding-bottom: 0 !important; }
+/* Entrada do header (logo, menu e botão) feita pelo motion.js. */
+.ov-anim #flex-header .ov-header { visibility: hidden; }
+.ov-header [data-layout-grid] { min-height: var(--ov-hdr) !important; align-items: center !important; align-content: center !important; }
+.ov-header [data-layout-grid] > .flex-element.group { align-self: center !important; }
+/* Item da página atual (a Duda marca com .dmNavItemSelected / aria-current). */
+/* Linha sob o texto (não sob a área de clique do link, que tem padding). */
+.ov-nav .nav-item-text { position: relative; }
+/* A Duda usa este mesmo ::after no efeito nativo e zera altura/fundo: por isso os !important. */
+.ov-nav .nav-item-text::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; right: 0 !important; top: auto !important; bottom: -4px !important;
+  width: auto !important; height: 1px !important; opacity: 1 !important;
+  background: var(--ov-ambar) !important;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ov-ease);
+}
+.ov-nav a:hover .nav-item-text::after, .ov-nav .dmNavItemSelected > a .nav-item-text::after, .ov-nav a[aria-current="page"] .nav-item-text::after { transform: scaleX(1); transform-origin: left; }
+/* O efeito nativo de sublinhado da Duda fica desligado para não duplicar. */
+.ov-nav a.unifiednav__item::after, .ov-nav a.unifiednav__item::before { content: none !important; }
+.ov-nav .dmNavItemSelected > a, .ov-nav a[aria-current="page"] { color: var(--ov-aurora) !important; }
+.ov-menu-nav .dmNavItemSelected > a span, .ov-menu-nav a[aria-current="page"] span { color: var(--ov-ambar) !important; }
+
+/* ================= FOOTER DA PÁGINA ================= */
+.ov-footer-social .socialHubInnerDiv { justify-content: flex-start !important; text-align: left !important; }
+.ov-footer-social a { filter: grayscale(1) contrast(1.1); opacity: 0.75; transition: filter 0.4s, opacity 0.4s; }
+.ov-footer-social a:hover { filter: none; opacity: 1; }
+/* Menu do rodapé: sem divisórias do layout vertical; contatos sem sublinhado. */
+.ov-footer-nav .unifiednav__item-wrap, .ov-footer-nav .unifiednav__item, .ov-footer-nav .unifiednav__container { border: 0 !important; }
+.ov-footer-nav .unifiednav__item-wrap::before, .ov-footer-nav .unifiednav__item-wrap::after,
+.ov-footer-nav .unifiednav__item::before, .ov-footer-nav .unifiednav__item::after,
+.ov-footer-nav .unifiednav__container::before, .ov-footer-nav .unifiednav__container::after { content: none !important; display: none !important; }
+.ov-footer-nav a, .ov-footer-nav .nav-item-text { letter-spacing: normal !important; }
+.ov-footer-contact a { text-decoration: none !important; transition: color 0.4s; }
+.ov-footer-contact a:hover { color: var(--ov-sol) !important; }
+
+/* ================= RESPONSIVO ================= */
+@media (max-width: 1023px) {
+  .ov-svc-grid { flex-direction: column !important; }
+  .ov-svc-frame { display: none !important; }
+  .ov-svc-block { min-height: 0 !important; padding: 3.5rem 0 !important; border-top: 1px solid rgba(255, 242, 233, 0.12); }
+  .ov-svc-block:first-child { border-top: 0; padding-top: 0 !important; }
+  .ov-svc-mimg { display: block !important; aspect-ratio: 4 / 3; height: auto !important; overflow: hidden; }
+  .ov-svc-mimg img { width: 100% !important; height: 100% !important; object-fit: cover; }
+
+  .ov-proj-track { flex-direction: column !important; width: 100% !important; min-height: 0; padding: 7rem 0 !important; align-items: stretch !important; gap: 4rem !important; }
+  .ov-proj-intro, .ov-proj-end { width: 100% !important; }
+  [class^="ov-"] .flex-element.widget-wrapper.ov-proj-gallery { width: 100% !important; }
+  .ov-proj-gallery .layout-container { flex-direction: column !important; width: 100% !important; }
+  .ov-proj-gallery .photogallery-column { width: 100% !important; }
+  .ov-proj-gallery .thumbnailInnerWrapper { flex-direction: column !important; align-items: stretch !important; gap: 1.5rem !important; }
+  .ov-proj-gallery .image-container { width: 100% !important; flex: none !important; }
+
+  .ov-seg-gallery .image-container { display: block !important; position: relative !important; opacity: 1 !important; inset: auto !important; flex: none; width: 4.5rem !important; height: 4.5rem !important; border-radius: 999px 999px 0 0 !important; overflow: hidden; }
+  .ov-seg-gallery .image-container img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+
+  .ov-value { width: 45% !important; }
+  .ov-seg-head > * { width: 100% !important; }
+  .ov-faq > section > .grid > .group { flex-direction: column !important; }
+  .ov-faq-aside, .ov-faq-list { width: 100% !important; }
+  .ov-footer-top { flex-direction: column !important; }
+  .ov-footer-top > * { width: 100% !important; }
+}
+@media (max-width: 767px) {
+  .ov-hero { --arch: inset(52svh 12vw 0svh 12vw round 38vw 38vw 0vw 0vw); }
+  .ov-hero-lead { margin-top: 1.5rem !important; }
+  .ov-value { width: 100% !important; }
+  .ov-values-mark { width: 72px !important; height: 72px !important; }
+  .ov-manifesto-lead { width: 100% !important; }
+  .ov-sunrise > section::after { width: 58vw; }
+  .ov-sunrise > section::before { width: 120vw; }
+}
+
+/* =====================================================================
+   PÁGINAS INTERNAS (estrutura e movimento; cores/tamanhos são nativos)
+   ===================================================================== */
+
+/* Fraunces com eixo SOFT também nos títulos do tema. */
+[class^="ov-"] h1, [class^="ov-"] h2, [class^="ov-"] h3, [class^="ov-"] h4 { font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144; }
+
+/* ---------- hero de página (imagem cheia; nasce num arco ao carregar) ---------- */
+.ov-phero { position: relative; overflow: hidden !important; min-height: 100svh; }
+.ov-phero > section, .ov-phero > section > .grid, .ov-phero > section > .grid > .group, .ov-phero .ov-phero-col { position: static !important; }
+.ov-phero .flex-element.group.ov-phero-col { min-height: 100svh !important; justify-content: flex-end !important; padding-bottom: 4rem !important; padding-top: calc(var(--ov-hdr) + 2rem) !important; }
+.ov-phero-media { position: absolute !important; inset: 0 !important; width: auto !important; height: auto !important; max-width: none !important; margin: 0 !important; z-index: 0 !important; overflow: hidden !important; }
+.ov-phero-media .imageWidget, .ov-phero-media img { width: 100% !important; height: 110% !important; max-width: none !important; margin: 0 !important; object-fit: cover !important; }
+.ov-phero::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(to top, #16132c 0%, rgba(22, 19, 44, 0.45) 45%, rgba(22, 19, 44, 0.3) 100%); }
+.ov-phero-title, .ov-phero-sub { position: relative !important; z-index: 2; }
+.ov-anim .ov-phero-title, .ov-anim .ov-phero-sub { visibility: hidden; }
+/* Página dinâmica: a foto vem do fundo da seção (campo "hero" da coleção). */
+.ov-phero--bound > section { position: relative !important; background-size: cover !important; background-position: center !important; }
+/* O arco de entrada (clip-path) cria uma camada própria na seção: aqui o véu fica dentro dela, abaixo do texto. */
+.ov-phero--bound::after { content: none !important; }
+.ov-phero--bound > section::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(to top, #16132c 0%, rgba(22, 19, 44, 0.45) 45%, rgba(22, 19, 44, 0.3) 100%); }
+.ov-phero--bound > section > .grid { position: relative; z-index: 2; }
+
+/* ---------- abertura tipográfica ---------- */
+.ov-anim .ov-st-title, .ov-anim .ov-st-lead { visibility: hidden; }
+.ov-hub-index ul, .ov-filter ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+.ov-hub-index li, .ov-filter li { margin: 0 !important; padding: 0 !important; text-indent: 0 !important; }
+.ov-hub-index li::before, .ov-filter li::before { content: none !important; }
+/* Índice de serviços à direita do texto: duas colunas. */
+.ov-st-sub .ov-hub-index ul { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 0.9rem 2.5rem; justify-content: end; }
+.ov-hub-index a { color: var(--ov-aurora) !important; text-decoration: none !important; border-bottom: 1px solid rgba(255, 242, 233, 0.2); padding-bottom: 4px; transition: color 0.4s, border-color 0.4s; }
+.ov-hub-index a:hover { color: var(--ov-ambar) !important; border-color: var(--ov-ambar); }
+.ov-filter ul { gap: 0.5rem; }
+.ov-st-sub .ov-filter ul { justify-content: flex-end; }
+.ov-filter a {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 242, 233, 0.2);
+  color: rgba(255, 242, 233, 0.85) !important;
+  text-decoration: none !important;
+  transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+}
+.ov-filter a:hover { border-color: var(--ov-ambar); color: var(--ov-ambar) !important; }
+.ov-filter a.is-active { background: var(--ov-aurora); border-color: transparent; color: var(--ov-noite) !important; }
+
+/* ---------- introdução com arco ---------- */
+.ov-intro-arch { width: 100% !important; max-width: 34rem !important; aspect-ratio: 4 / 5; height: auto !important; border-radius: 999px 999px 0 0 !important; overflow: hidden !important; }
+.ov-intro-arch .imageWidget, .ov-intro-arch img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; }
+
+/* ---------- linhas de detalhe ---------- */
+.ov-detail-row { padding: 3.5rem 0 !important; border-bottom: 1px solid rgba(255, 242, 233, 0.15); }
+.ov-detail-list { border-top: 1px solid rgba(255, 242, 233, 0.15); margin-bottom: 4rem !important; }
+.ov-detail-row--img { border: 0; padding: 4rem 0 !important; }
+.ov-detail-list:has(.ov-detail-row--img) { border-top: 0; }
+.ov-detail-media { aspect-ratio: 4 / 5; overflow: hidden !important; border-radius: 28px; }
+.ov-detail-img { width: 100% !important; height: 100% !important; }
+.ov-detail-img .imageWidget, .ov-detail-img img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; }
+.ov-tags ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.ov-tags li { display: inline-flex !important; align-items: center; text-indent: 0 !important; line-height: 1.5 !important; margin: 0 !important; padding: 0.3rem 0.9rem !important; border: 1px solid rgba(255, 242, 233, 0.2); border-radius: 999px; font-size: 0.875rem !important; color: rgba(255, 242, 233, 0.85) !important; }
+.ov-tags li::before { content: none !important; }
+
+/* ---------- processo ---------- */
+.ov-process-list { position: relative; padding-left: 3rem !important; }
+.ov-process-list::before, .ov-process-list::after { content: ""; position: absolute; left: 11px; top: 0.75rem; bottom: 0.75rem; width: 1px; }
+.ov-process-list::before { background: rgba(255, 242, 233, 0.15); }
+.ov-process-list::after { background: var(--ov-sun); transform-origin: top; transform: scaleY(var(--light, 1)); }
+.ov-step { position: relative; padding-bottom: 4rem !important; }
+.ov-step:last-child { padding-bottom: 0 !important; }
+.ov-step::before { content: ""; position: absolute; left: calc(-3rem + 1px); top: 0.9rem; width: 21px; height: 21px; border-radius: 50%; border: 1px solid rgba(255, 242, 233, 0.25); background: var(--ov-noite); transform: scale(0.55); transition: transform 0.5s var(--ov-ease), background-color 0.5s; }
+.ov-step.is-lit::before { transform: scale(1); background: var(--ov-ambar); border-color: transparent; }
+.ov-step h5 { margin: 1rem 0 0.5rem !important; }
+.ov-step p { margin: 0 !important; }
+.ov-step p:first-child { transition: color 0.5s; }
+.ov-step.is-lit p:first-child span { color: var(--ov-ambar) !important; }
+
+/* ---------- recursos ---------- */
+.ov-feature-img { width: 100% !important; aspect-ratio: 4 / 3; height: auto !important; overflow: hidden !important; border-radius: 24px; }
+.ov-feature-img .imageWidget, .ov-feature-img img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; transition: scale 1.2s var(--ov-ease); }
+.ov-feature:hover .ov-feature-img img { scale: 1.05; }
+/* 3 colunas descontando os 2 vãos de 48px da grade (31% + vãos passava de 100% e quebrava em 2). */
+[class^="ov-"] .flex-element.group.ov-feature { width: calc((100% - 96px) / 3) !important; }
+.ov-feature-text h4 { margin-bottom: 0.75rem !important; }
+.ov-feature-text p { margin: 0.35rem 0 0 !important; }
+
+/* ---------- cartões empilhados (Serviços) ---------- */
+.ov-stack-card { position: relative; }
+.ov-stack-card > section { min-height: 100svh; display: flex !important; align-items: center; }
+/* A seção vira flex para centralizar: o grid (que leva o fundo) precisa ocupar a largura toda. */
+.ov-stack-card > section > .grid { width: 100% !important; align-self: stretch; }
+/* Botão depois da lista, com respiro. */
+.ov-stack-copy .ov-stack-btn { margin-top: 3rem !important; }
+.ov-stack-img { width: 100% !important; aspect-ratio: 4 / 3.4; height: auto !important; overflow: hidden !important; }
+.ov-stack-img .imageWidget, .ov-stack-img img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; }
+
+/* ---------- portfólio (Projetos) ---------- */
+.ov-portfolio-gallery .layout-container { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5rem 2.5rem; }
+.ov-portfolio-gallery .photogallery-row { display: contents !important; }
+.ov-portfolio-gallery .photogallery-column { width: auto !important; max-width: none !important; padding: 0 !important; }
+.ov-portfolio-gallery .photoGalleryThumbs { margin: 0 !important; padding: 0 !important; width: 100% !important; list-style: none; }
+.ov-portfolio-gallery .photoGalleryThumbs.is-hidden { display: none !important; }
+/* A coluna do item filtrado também sai da grade, senão a célula fica vazia. */
+.ov-portfolio-gallery .photogallery-column:has(.is-hidden) { display: none !important; }
+.ov-portfolio-gallery .thumbnailInnerWrapper { padding: 0 !important; background: none !important; box-shadow: none !important; opacity: 1 !important; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .image-container { height: auto !important; padding: 7% !important; border-radius: 28px; background: var(--ov-indigo) radial-gradient(ellipse at 50% 90%, rgba(245, 96, 53, 0.32), transparent 62%) !important; }
+/* Caixa da imagem com a mesma proporção em todos os projetos; o mockup cabe inteiro dentro. */
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .image-container { aspect-ratio: 4 / 3; box-sizing: border-box; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .image-container a { display: block !important; width: 100% !important; height: 100% !important; padding: 0 !important; background-image: none !important; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .image-container a img { display: block !important; width: 100% !important; height: 100% !important; object-fit: contain !important; max-width: none !important; transition: translate 1s var(--ov-ease), scale 1s var(--ov-ease); }
+.ov-portfolio-gallery .photoGalleryThumbs:hover .image-container img { translate: 0 -8px; scale: 1.03; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-container { position: static !important; height: auto !important; background: none !important; padding: 1.75rem 0 0 !important; text-align: left !important; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-inner { display: flex !important; flex-direction: column; align-items: flex-start; padding: 0 !important; background: none !important; text-align: left !important; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-title { display: block !important; font-size: clamp(2rem, 3vw, 3.25rem) !important; line-height: 1 !important; letter-spacing: -0.035em !important; text-align: left !important; margin: 0 !important; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-text, #dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-text p { font-size: 1.05rem !important; line-height: 1.6 !important; margin: 0.75rem 0 0 !important; text-align: left !important; }
+/* O botão da legenda traz a categoria (campo "Area"): vira etiqueta acima do nome e usa o link do site do cliente. */
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-button { display: inline-block !important; position: static !important; margin: 0 0 0.5rem !important; padding: 0 !important; background: none !important; border: 0 !important; box-shadow: none !important; order: -1; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-button .text { color: var(--ov-ambar) !important; font-size: 0.875rem !important; padding: 0 !important; white-space: nowrap; }
+#dm .ov-portfolio-gallery:not(#_a):not(#_b) .caption-button .iconBg { display: none !important; }
+
+/* ---------- segmentos: página e "outros segmentos" ---------- */
+.ov-segments--page .ov-seg-gallery, .ov-segments--others .ov-seg-gallery { margin-top: 0 !important; }
+/* Página Segmentos: nome | chamada | seta (a seta acende no sol no hover). */
+#dm .ov-seg-gallery--details:not(#_a):not(#_b) .caption-inner { display: grid !important; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 3rem; align-items: center; gap: 2.5rem; width: 100%; }
+.ov-seg-gallery--details .caption-container { flex: 1 1 auto; width: 100% !important; }
+#dm .ov-seg-gallery--details:not(#_a):not(#_b) .caption-text, #dm .ov-seg-gallery--details:not(#_a):not(#_b) .caption-text p { font-size: 1.05rem !important; line-height: 1.6 !important; margin: 0 !important; max-width: 28rem; text-align: left !important; }
+.ov-seg-gallery--details .caption-inner::after {
+  content: ""; grid-column: 3; width: 3rem; height: 3rem; border-radius: 50%; box-sizing: border-box;
+  border: 1px solid rgba(255, 242, 233, 0.2);
+  background: no-repeat center / 1.25rem url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff2e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E");
+  transition: background-color 0.5s, border-color 0.5s;
+}
+.ov-seg-gallery--details .photoGalleryThumbs:hover .caption-inner::after { background-color: var(--ov-sol); border-color: transparent; }
+.ov-others-label h6 { margin-bottom: 2rem !important; }
+
+/* ---------- diferenciais (campo da coleção) ---------- */
+.ov-highlights-list ul { list-style: none !important; padding: 0 !important; margin: 0 !important; border-top: 1px solid rgba(255, 242, 233, 0.15); }
+.ov-highlights-list li {
+  position: relative;
+  list-style: none !important;
+  text-indent: 0 !important;
+  margin: 0 !important;
+  padding: 1.75rem 0 1.75rem 2rem !important;
+  border-bottom: 1px solid rgba(255, 242, 233, 0.15);
+  font-family: "Fraunces", Georgia, serif;
+  font-variation-settings: "SOFT" 100, "opsz" 144;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.ov-highlights-list li::before {
+  content: "" !important; position: static !important; flex: none; order: -1;
+  display: block !important; box-sizing: border-box; width: 12px !important; height: 12px !important; min-width: 0 !important;
+  margin: 0 !important; padding: 0 !important; font-size: 0 !important; line-height: 0 !important;
+  border-radius: 50%; background: var(--ov-sun);
+}
+/* Bolinha e texto lado a lado, centralizados; a entrelinha do editor (1.6) fica apertada como no protótipo. */
+.ov-highlights-list li { display: flex !important; align-items: center; gap: 1.25rem; padding-left: 0 !important; }
+.ov-highlights-list li, .ov-highlights-list li * { line-height: 1.15 !important; }
+
+/* ---------- perguntas vindas da coleção (viram acordeão pelo motion.js) ---------- */
+.ov-faq-bound .ov-qa { border-bottom: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-faq-bound .ov-qa:first-child { border-top: 1px solid rgba(255, 242, 233, 0.12); }
+.ov-faq-bound .ov-qa-q {
+  all: unset;
+  box-sizing: border-box;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem;
+  width: 100%;
+  padding: 1.6rem 0;
+  cursor: pointer;
+  font-family: "Hanken Grotesk", system-ui, sans-serif;
+  font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+  line-height: 1.4;
+  color: var(--ov-aurora);
+}
+.ov-faq-bound .ov-qa-q:hover { color: var(--ov-ambar); }
+.ov-faq-bound .ov-qa-q:focus-visible { outline: 2px solid var(--ov-ambar); outline-offset: 4px; }
+/* Mesmo ícone do acordeão nativo: círculo com "+" desenhado (não caractere). */
+.ov-faq-bound .ov-qa-q { letter-spacing: normal; }
+.ov-faq-bound .ov-qa-q::after {
+  content: ""; flex: none; box-sizing: border-box; width: 2rem; height: 2rem; border-radius: 50%;
+  border: 1px solid rgba(255, 242, 233, 0.25);
+  background: linear-gradient(var(--ov-aurora), var(--ov-aurora)) center / 14px 1.5px no-repeat, linear-gradient(var(--ov-aurora), var(--ov-aurora)) center / 1.5px 14px no-repeat;
+  transition: rotate 0.5s var(--ov-ease), background-color 0.5s, border-color 0.5s;
+}
+.ov-faq-bound .ov-qa.is-open .ov-qa-q::after { rotate: 45deg; background-color: var(--ov-sol); border-color: transparent; }
+.ov-faq-bound .ov-qa-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.6s var(--ov-ease); }
+.ov-faq-bound .ov-qa.is-open .ov-qa-a { grid-template-rows: 1fr; }
+.ov-faq-bound .ov-qa-a > div { overflow: hidden; }
+.ov-faq-bound .ov-qa-a p { margin: 0 !important; padding: 0 3rem 1.75rem 0; color: rgba(255, 242, 233, 0.75) !important; }
+
+/* ---------- sobre ---------- */
+.ov-story-arch { width: 100% !important; max-width: 30rem !important; aspect-ratio: 3 / 4; height: auto !important; border-radius: 999px 999px 0 0 !important; overflow: hidden !important; }
+.ov-story-arch .imageWidget, .ov-story-arch img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; }
+/* Parágrafos da história com respiro entre si (como no protótipo). */
+.ov-story-text p { margin: 0 !important; }
+.ov-story-text p + p { margin-top: 1.25rem !important; }
+.ov-pillar p:last-child { max-width: 32rem; }
+.ov-story-label h6, .ov-pillar h6 { color: var(--ov-ambar) !important; }
+.ov-pillar { border-top: 1px solid rgba(255, 242, 233, 0.15); padding-top: 2rem !important; }
+.ov-pillar h4 { margin: 1.5rem 0 !important; }
+
+/* ---------- contato ---------- */
+.ov-contact-arch { width: 100% !important; max-width: 26rem !important; aspect-ratio: 4 / 5; height: auto !important; border-radius: 999px 999px 0 0 !important; overflow: hidden !important; }
+.ov-contact-arch .imageWidget, .ov-contact-arch img { width: 100% !important; height: 100% !important; max-width: none !important; object-fit: cover !important; object-position: 35% 50% !important; }
+/* Cada contato vira uma linha: texto à esquerda, seta à direita, divisória embaixo. */
+.ov-contact-links p { margin: 0 !important; }
+.ov-contact-links p:first-child { margin-bottom: 0.75rem !important; }
+.ov-contact-links p:has(a) > span { display: block !important; }
+.ov-contact-links a {
+  display: flex !important; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1rem 0; border-bottom: 1px solid rgba(255, 242, 233, 0.15);
+  text-decoration: none !important; transition: color 0.4s;
+}
+.ov-contact-links a::after {
+  content: ""; flex: none; width: 1.25rem; height: 1.25rem; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: translate 0.5s var(--ov-ease);
+}
+.ov-contact-links a:hover { color: var(--ov-ambar) !important; }
+.ov-contact-links a:hover::after { translate: 2px -2px; }
+.ov-contact-links p:last-child { padding-top: 1.25rem; }
+/* Formulário: cores, bordas, fontes e botão são nativos (page_contato.py). Aqui só o que a Duda não
+   oferece: respiro interno dos campos e borda âmbar no foco. */
+#dm .ov-form:not(#_a):not(#_b) .advanced-form-input:not(fieldset) { padding: 1rem 1.25rem !important; box-sizing: border-box; transition: border-color 0.4s; }
+#dm .ov-form:not(#_a):not(#_b) .advanced-form-input:not(fieldset):focus { border-color: var(--ov-ambar) !important; outline: none !important; }
+#dm .ov-form:not(#_a):not(#_b) textarea.advanced-form-input { min-height: 10rem; }
+
+/* ---------- nascer do sol: texto do CTA (segmentos) ---------- */
+.ov-sunrise-text p { text-align: center !important; margin: 0 0 0.5rem !important; }
+
+@media (max-width: 1023px) {
+  .ov-intro > section > .grid > .group, .ov-process > section > .grid > .group, .ov-highlights > section > .grid > .group,
+  .ov-story > section > .grid > .group, .ov-pillars > section > .grid > .group, .ov-contact > section > .grid > .group,
+  .ov-stack-card > section > .grid > .group, .ov-faq--bound > section > .grid > .group { flex-direction: column !important; }
+  .ov-intro .flex-element.group, .ov-process .flex-element.group, .ov-highlights .flex-element.group, .ov-story .flex-element.group,
+  .ov-pillars .flex-element.group, .ov-contact .flex-element.group, .ov-stack-card .flex-element.group { width: 100% !important; }
+  .ov-detail-row > *, .ov-detail-row--img > * { width: 100% !important; }
+  [class^="ov-"] .flex-element.group.ov-feature { width: calc((100% - 48px) / 2) !important; }
+  .ov-stack-card > section { min-height: 0; }
+  .ov-st-sub > * { width: 100% !important; }
+  .ov-st-sub .ov-hub-index ul { grid-template-columns: 1fr; justify-content: start; justify-items: start; }
+  .ov-st-sub .ov-hub-index, .ov-st-sub .ov-hub-index li { text-align: left !important; }
+  .ov-portfolio-gallery .layout-container { grid-template-columns: 1fr; gap: 4rem; }
+  .ov-st-sub .ov-filter ul { justify-content: flex-start; }
+  #dm .ov-seg-gallery--details:not(#_a):not(#_b) .caption-inner { display: block !important; }
+  #dm .ov-seg-gallery--details:not(#_a):not(#_b) .caption-text, .ov-seg-gallery--details .caption-inner::after { display: none !important; }
+}
+@media (max-width: 767px) {
+  [class^="ov-"] .flex-element.group.ov-feature { width: 100% !important; }
+  .ov-highlights-list li { font-size: 1.5rem; }
+}
+
+/* Marcador padrão da Duda fora das listas estilizadas. */
+.ov-highlights-list li::marker, .ov-tags li::marker, .ov-hub-index li::marker, .ov-filter li::marker { content: ""; }
+/* Textos ligados à coleção: tamanho e cor vêm do estilo nativo; aqui só entrelinha. */
+.ov-phero--bound .ov-phero-title .dmNewParagraph { line-height: 1.05 !important; letter-spacing: -0.035em; font-variation-settings: "SOFT" 100, "opsz" 144; }
+.ov-seg-cta-title .dmNewParagraph { line-height: 1 !important; letter-spacing: -0.035em; font-variation-settings: "SOFT" 100, "opsz" 144; text-align: center; }
+.ov-seg-cta-text .dmNewParagraph { text-align: center; line-height: 1.6 !important; }
+.ov-seg-cta .flex-element.group { align-items: center !important; text-align: center; }
+/* O nascer do sol vive no footer global: sem margens do contêiner do footer. */
+.dmFooterContainer .ov-sunrise, #flex-footer .ov-sunrise { margin: 0 !important; }
